@@ -9,6 +9,10 @@
   "keywords": [
     "hash"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/brandonchartier/hash-brown"
+  },
   "author": "Brandon Chartier",
   "license": "ISC",
   "dependencies": {
