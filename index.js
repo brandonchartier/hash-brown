@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 
 const argv = require('minimist')(process.argv.slice(2));
-const debug = require('debug')('hash-brown');
 const fs = require('fs-promise');
 const glob = require('globby');
 const hasha = require('hasha');
@@ -9,6 +8,7 @@ const path = require('path');
 const memoizee = require('memoizee');
 
 const opt = {
+	algorithm: argv.algorithm || argv.a || 'sha1',
 	files: argv.files || argv.f,
 	manifest: argv.manifest || argv.m,
 	output: argv.output || argv.o
@@ -26,11 +26,17 @@ if (!opt.output) {
 	throw new Error('Specify an output directory with --output="example/"');
 }
 
+Object.keys(opt).forEach(x => {
+	if (typeof opt[x] !== 'string') {
+		throw new TypeError(`Expected "string", but received "${typeof opt[x]}" for ${x}`);
+	}
+});
+
 const parse = files => {
 	return files.map(file => {
 		const parsed = path.parse(file);
 		const hash = hasha.fromFileSync(file, {
-			algorithm: 'sha1'
+			algorithm: opt.algorithm
 		});
 
 		return {
@@ -73,7 +79,7 @@ Promise.all([
 		return acc;
 	}, {}));
 }).then(() => {
-	debug('OK');
+	// OK
 }).catch(err => {
 	console.error(err);
 });

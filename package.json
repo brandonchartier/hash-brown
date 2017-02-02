@@ -1,6 +1,6 @@
 {
   "name": "hash-brown",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Tasty hashes made out of whatever",
   "main": "index.js",
   "scripts": {
@@ -16,12 +16,10 @@
   "author": "Brandon Chartier",
   "license": "ISC",
   "dependencies": {
-    "debug": "^2.6.0",
     "fs-promise": "^1.0.0",
     "globby": "^6.1.0",
     "hasha": "^2.2.0",
     "memoizee": "^0.4.1",
-    "minimist": "^1.2.0",
-    "progress": "^1.1.8"
+    "minimist": "^1.2.0"
   }
 }
