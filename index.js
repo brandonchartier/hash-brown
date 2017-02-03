@@ -78,8 +78,6 @@ Promise.all([
 		acc[x.name] = x.path;
 		return acc;
 	}, {}));
-}).then(() => {
-	// OK
 }).catch(err => {
 	console.error(err);
 });
