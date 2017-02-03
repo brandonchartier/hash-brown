@@ -1,16 +1,17 @@
 {
   "name": "hash-brown",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Tasty hashes made out of whatever",
   "main": "index.js",
   "bin": {
-    "hash": "./index.js"
+    "hashbrown": "./index.js"
   },
   "scripts": {
     "test": ""
   },
   "keywords": [
-    "hash"
+    "hash",
+    "breakfast"
   ],
   "repository": {
     "type": "git",
