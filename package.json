@@ -1,10 +1,10 @@
 {
   "name": "hash-brown",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Tasty hashes made out of whatever",
   "main": "index.js",
   "bin": {
-    "hash-brown": "./index.js"
+    "hash": "./index.js"
   },
   "scripts": {
     "test": ""
@@ -14,7 +14,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/brandonchartier/hash-brown"
+    "url": "git+https://github.com/brandonchartier/hash-brown.git"
   },
   "author": "Brandon Chartier",
   "license": "ISC",
@@ -24,5 +24,9 @@
     "hasha": "^2.2.0",
     "memoizee": "^0.4.1",
     "minimist": "^1.2.0"
-  }
+  },
+  "bugs": {
+    "url": "https://github.com/brandonchartier/hash-brown/issues"
+  },
+  "homepage": "https://github.com/brandonchartier/hash-brown#readme"
 }
