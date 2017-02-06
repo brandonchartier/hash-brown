@@ -1,11 +1,12 @@
 #!/usr/bin/env node
 
-const argv = require('minimist')(process.argv.slice(2));
+const minimist = require('minimist');
 const fs = require('fs-promise');
 const glob = require('globby');
 const hasha = require('hasha');
 const path = require('path');
-const memoizee = require('memoizee');
+
+const argv = minimist(process.argv.slice(2));
 
 const opt = {
 	algorithm: argv.algorithm || argv.a || 'sha1',
@@ -32,28 +33,28 @@ Object.keys(opt).forEach(x => {
 	}
 });
 
+// Parse files, create hash
 const parse = files => {
 	return files.map(file => {
-		const parsed = path.parse(file);
+		const { name, ext } = path.parse(file);
 		const hash = hasha.fromFileSync(file, {
 			algorithm: opt.algorithm
 		});
 
 		return {
-			name: parsed.name,
-			path: `${opt.output}${parsed.name}.${hash}${parsed.ext}`,
+			name: name,
+			path: `${opt.output}${name}.${hash}${ext}`,
 			contents: fs.readFileSync(file)
 		};
 	});
 };
 
-const cache = memoizee(files => {
-	return new Promise((resolve, reject) => {
-		glob(files).then(xs => {
-			return resolve(parse(xs));
-		}).catch(err => {
-			return reject(err);
-		});
+// Find our files and then create a cache of the parsed result
+const cache = new Promise((resolve, reject) => {
+	return glob(opt.files).then(xs => {
+		return resolve(parse(xs));
+	}).catch(err => {
+		return reject(err);
 	});
 });
 
@@ -61,23 +62,17 @@ Promise.all([
 	// Recursively create the directories for output and manifest
 	fs.ensureDir(opt.output),
 	fs.ensureDir(path.parse(opt.manifest).dir)
-]).then(() => {
-	// Find our files and then create a cache of the parsed result
-	return cache(opt.files);
-}).then(files => {
+]).then(() => cache).then(files => {
 	// Write all of our files with the hash added to the filename
 	return Promise.all(files.map(x => {
 		return fs.writeFile(x.path, x.contents);
 	}));
-}).then(() => {
-	// Get a cached copy of our parsed files
-	return cache(opt.files);
-}).then(files => {
+}).then(() => cache).then(files => {
 	// Create a manifest JSON using the name of the parsed files
 	return fs.writeJson(opt.manifest, files.reduce((acc, x) => {
 		acc[x.name] = x.path;
 		return acc;
 	}, {}));
 }).catch(err => {
-	console.error(err);
+	throw new Error(err);
 });
