@@ -1,6 +1,6 @@
 {
   "name": "hash-brown",
-  "version": "1.0.5",
+  "version": "1.1.0",
   "description": "Tasty hashes made out of whatever",
   "main": "index.js",
   "bin": {
@@ -22,7 +22,6 @@
   "dependencies": {
     "fs-promise": "^1.0.0",
     "globby": "^6.1.0",
-    "hasha": "^2.2.0",
     "minimist": "^1.2.0"
   },
   "bugs": {
