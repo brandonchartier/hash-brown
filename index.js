@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 
-const minimist = require('minimist');
+const crypto = require('crypto');
 const fs = require('fs-promise');
 const glob = require('globby');
-const hasha = require('hasha');
+const minimist = require('minimist');
 const path = require('path');
 
 const argv = minimist(process.argv.slice(2));
@@ -11,21 +11,9 @@ const argv = minimist(process.argv.slice(2));
 const opt = {
 	algorithm: argv.algorithm || argv.a || 'sha1',
 	files: argv.files || argv.f,
-	manifest: argv.manifest || argv.m,
+	manifest: argv.manifest || argv.m || 'manifest.json',
 	output: argv.output || argv.o
 };
-
-if (!opt.files) {
-	throw new Error('Add some files with --files="example/**/*.js"');
-}
-
-if (!opt.manifest) {
-	throw new Error('Provide a manifest location with --manifest="example/manifest.json"');
-}
-
-if (!opt.output) {
-	throw new Error('Specify an output directory with --output="example/"');
-}
 
 Object.keys(opt).forEach(x => {
 	if (typeof opt[x] !== 'string') {
@@ -37,14 +25,13 @@ Object.keys(opt).forEach(x => {
 const parse = files => {
 	return files.map(file => {
 		const { name, ext } = path.parse(file);
-		const hash = hasha.fromFileSync(file, {
-			algorithm: opt.algorithm
-		});
+		const contents = fs.readFileSync(file);
+		const hash = crypto.createHash(opt.algorithm).update(contents).digest('hex');
 
 		return {
-			name: name,
-			path: `${opt.output}${name}.${hash}${ext}`,
-			contents: fs.readFileSync(file)
+			contents,
+			name,
+			path: path.join(opt.output, `${name}.${hash}${ext}`)
 		};
 	});
 };
