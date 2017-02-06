@@ -9,8 +9,8 @@ Tasty hashes made out of whatever.
 
 - `hashbrown [options]` - Run hash-brown using your options
 - `-a --algorithm` - Set the algorithm used for hashing, defaults to "sha1"
-- `-f --files` - Set the files to be hashed
-- `-o --output` - Set the destination path
+- `-f --files` - Set the files to be hashed, defaults to ""
+- `-o --output` - Set the destination path, defaults to ""
 - `-m --manifest` - Set the JSON manifest path, defaults to "manifest.json"
 
 ## Example

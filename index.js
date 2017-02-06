@@ -10,16 +10,10 @@ const argv = minimist(process.argv.slice(2));
 
 const opt = {
 	algorithm: argv.algorithm || argv.a || 'sha1',
-	files: argv.files || argv.f,
+	files: argv.files || argv.f || '',
 	manifest: argv.manifest || argv.m || 'manifest.json',
-	output: argv.output || argv.o
+	output: argv.output || argv.o || ''
 };
-
-Object.keys(opt).forEach(x => {
-	if (typeof opt[x] !== 'string') {
-		throw new TypeError(`Expected "string", but received "${typeof opt[x]}" for ${x}`);
-	}
-});
 
 // Parse files, create hash
 const parse = files => {
