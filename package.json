@@ -1,6 +1,6 @@
 {
   "name": "hash-brown",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "description": "Tasty hashes made out of whatever",
   "main": "index.js",
   "bin": {

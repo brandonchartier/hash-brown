@@ -11,6 +11,7 @@ const argv = minimist(process.argv.slice(2));
 const opt = {
 	algorithm: argv.algorithm || argv.a || 'sha1',
 	files: argv.files || argv.f || '',
+	filenameOnly: argv.filenameOnly || argv.fo || false,
 	manifest: argv.manifest || argv.m || 'manifest.json',
 	output: argv.output || argv.o || ''
 };
@@ -21,11 +22,13 @@ const parse = files => {
 		const { name, ext } = path.parse(file);
 		const contents = fs.readFileSync(file);
 		const hash = crypto.createHash(opt.algorithm).update(contents).digest('hex');
+		const filename = `${name}.${hash}${ext}`;
 
 		return {
 			contents,
 			name,
-			path: path.join(opt.output, `${name}.${hash}${ext}`)
+			path: path.join(opt.output, filename),
+			filename
 		};
 	});
 };
@@ -51,7 +54,7 @@ Promise.all([
 }).then(() => cache).then(files => {
 	// Create a manifest JSON using the name of the parsed files
 	return fs.writeJson(opt.manifest, files.reduce((acc, x) => {
-		acc[x.name] = x.path;
+		acc[x.name] = opt.filenameOnly ? x.filename : x.path;
 		return acc;
 	}, {}));
 }).catch(err => {
